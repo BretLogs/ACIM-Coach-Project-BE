@@ -42,13 +42,15 @@ async def get_clients(db: Session = Depends(get_db)):
 async def test_database(db: Session = Depends(get_db)):
     """Test database connectivity"""
     try:
+        from sqlalchemy import text
+        
         # Test basic database connection
-        result = db.execute("SELECT 1").scalar()
+        result = db.execute(text("SELECT 1")).scalar()
         print(f"Database test result: {result}")
         
         # Test if clients table exists
         try:
-            clients_count = db.execute("SELECT COUNT(*) FROM clients").scalar()
+            clients_count = db.execute(text("SELECT COUNT(*) FROM clients")).scalar()
             print(f"Clients table count: {clients_count}")
         except Exception as e:
             print(f"Error checking clients table: {e}")
