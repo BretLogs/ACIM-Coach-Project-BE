@@ -41,15 +41,16 @@ class Client(Base):
     client_id = Column(String(50), primary_key=True, index=True)
     username = Column(String(50), nullable=False, index=True)
     name = Column(String(100), nullable=False)
-    email = Column(String(100))
-    phone = Column(String(20))
     age = Column(Integer)
-    gender = Column(String(10))
-    weight = Column(Integer)  # in kg
-    height = Column(Integer)  # in cm
-    fitness_level = Column(String(20))
+    sex = Column(String(10))  # "male" or "female"
+    height_cm = Column(Integer)  # in cm
+    weight_kg = Column(Integer)  # in kg
+    activity_level = Column(String(20))  # "sedentary", "light", "moderate", "very_active", "athlete"
     goals = Column(Text)
-    medical_conditions = Column(Text)
+    bmr = Column(Integer)
+    tdee = Column(Integer)
+    calorie_maintenance = Column(Integer)
+    notes = Column(Text)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 

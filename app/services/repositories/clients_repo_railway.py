@@ -16,15 +16,16 @@ class ClientsRepositoryRailway:
             client_id=client_id,
             username=username,
             name=client_data.name,
-            email=client_data.email,
-            phone=client_data.phone,
             age=client_data.age,
-            gender=client_data.gender,
-            weight=client_data.weight,
-            height=client_data.height,
-            fitness_level=client_data.fitness_level,
+            sex=client_data.sex,
+            height_cm=client_data.height_cm,
+            weight_kg=client_data.weight_kg,
+            activity_level=client_data.activity_level,
             goals=client_data.goals,
-            medical_conditions=client_data.medical_conditions
+            bmr=client_data.bmr,
+            tdee=client_data.tdee,
+            calorie_maintenance=client_data.calorie_maintenance,
+            notes=client_data.notes
         )
         
         self.db.add(client)
