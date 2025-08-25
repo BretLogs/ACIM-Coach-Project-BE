@@ -13,10 +13,15 @@ DEFAULT_USERNAME = "admin"
 @router.post("/", response_model=ClientResponse)
 async def create_client(client_data: ClientCreate, db: Session = Depends(get_db)):
     try:
+        print(f"Creating client with data: {client_data}")
         clients_repo = ClientsRepositoryRailway(db)
         client_id = clients_repo.create_client(DEFAULT_USERNAME, client_data)
-        return ClientResponse(client_id=client_id)
+        print(f"Client created with ID: {client_id}")
+        response = ClientResponse(client_id=client_id)
+        print(f"Returning response: {response}")
+        return response
     except Exception as e:
+        print(f"Error creating client: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=str(e)

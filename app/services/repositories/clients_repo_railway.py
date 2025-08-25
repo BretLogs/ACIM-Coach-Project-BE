@@ -10,29 +10,39 @@ class ClientsRepositoryRailway:
     
     def create_client(self, username: str, client_data: ClientCreate) -> str:
         """Create a new client"""
-        client_id = str(uuid.uuid4())
-        
-        client = Client(
-            client_id=client_id,
-            username=username,
-            name=client_data.name,
-            age=client_data.age,
-            sex=client_data.sex,
-            height_cm=client_data.height_cm,
-            weight_kg=client_data.weight_kg,
-            activity_level=client_data.activity_level,
-            goals=client_data.goals,
-            bmr=client_data.bmr,
-            tdee=client_data.tdee,
-            calorie_maintenance=client_data.calorie_maintenance,
-            notes=client_data.notes
-        )
-        
-        self.db.add(client)
-        self.db.commit()
-        self.db.refresh(client)
-        
-        return client_id
+        try:
+            print(f"Repository: Creating client for username: {username}")
+            print(f"Repository: Client data: {client_data}")
+            
+            client_id = str(uuid.uuid4())
+            
+            client = Client(
+                client_id=client_id,
+                username=username,
+                name=client_data.name,
+                age=client_data.age,
+                sex=client_data.sex,
+                height_cm=client_data.height_cm,
+                weight_kg=client_data.weight_kg,
+                activity_level=client_data.activity_level,
+                goals=client_data.goals,
+                bmr=client_data.bmr,
+                tdee=client_data.tdee,
+                calorie_maintenance=client_data.calorie_maintenance,
+                notes=client_data.notes
+            )
+            
+            print(f"Repository: Adding client to database: {client}")
+            self.db.add(client)
+            self.db.commit()
+            self.db.refresh(client)
+            
+            print(f"Repository: Client created successfully with ID: {client_id}")
+            return client_id
+        except Exception as e:
+            print(f"Repository: Error creating client: {e}")
+            self.db.rollback()
+            raise e
     
     def get_clients(self, username: str) -> List[Client]:
         """Get all clients for a user"""

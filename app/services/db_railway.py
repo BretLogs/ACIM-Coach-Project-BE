@@ -6,10 +6,10 @@ from typing import List, Optional, Dict, Any
 
 class RailwayDatabaseService:
     def __init__(self):
-        self.db = SessionLocal()
+        pass  # Remove global db instance
     
     def get_db(self) -> Session:
-        return self.db
+        return SessionLocal()
     
     def create_tables_if_not_exist(self):
         """Create database tables if they don't exist"""
@@ -21,8 +21,7 @@ class RailwayDatabaseService:
     
     def close(self):
         """Close database connection"""
-        if self.db:
-            self.db.close()
+        pass  # Sessions are managed by get_db()
 
 # Global instance
 db_service = RailwayDatabaseService()
