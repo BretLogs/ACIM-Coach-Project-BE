@@ -38,6 +38,32 @@ async def get_clients(db: Session = Depends(get_db)):
             detail=str(e)
         )
 
+@router.get("/test-db")
+async def test_database(db: Session = Depends(get_db)):
+    """Test database connectivity"""
+    try:
+        # Test basic database connection
+        result = db.execute("SELECT 1").scalar()
+        print(f"Database test result: {result}")
+        
+        # Test if clients table exists
+        try:
+            clients_count = db.execute("SELECT COUNT(*) FROM clients").scalar()
+            print(f"Clients table count: {clients_count}")
+        except Exception as e:
+            print(f"Error checking clients table: {e}")
+            return {"status": "error", "message": f"Database connected but clients table issue: {e}"}
+        
+        return {
+            "status": "success", 
+            "database_connected": True,
+            "clients_count": clients_count,
+            "test_result": result
+        }
+    except Exception as e:
+        print(f"Database test error: {e}")
+        return {"status": "error", "message": str(e)}
+
 @router.get("/{client_id}", response_model=Client)
 async def get_client(client_id: str, db: Session = Depends(get_db)):
     try:
@@ -94,29 +120,3 @@ async def delete_client(client_id: str, db: Session = Depends(get_db)):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=str(e)
         )
-
-@router.get("/test-db")
-async def test_database(db: Session = Depends(get_db)):
-    """Test database connectivity"""
-    try:
-        # Test basic database connection
-        result = db.execute("SELECT 1").scalar()
-        print(f"Database test result: {result}")
-        
-        # Test if clients table exists
-        try:
-            clients_count = db.execute("SELECT COUNT(*) FROM clients").scalar()
-            print(f"Clients table count: {clients_count}")
-        except Exception as e:
-            print(f"Error checking clients table: {e}")
-            return {"status": "error", "message": f"Database connected but clients table issue: {e}"}
-        
-        return {
-            "status": "success", 
-            "database_connected": True,
-            "clients_count": clients_count,
-            "test_result": result
-        }
-    except Exception as e:
-        print(f"Database test error: {e}")
-        return {"status": "error", "message": str(e)}
