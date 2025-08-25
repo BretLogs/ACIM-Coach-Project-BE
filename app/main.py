@@ -55,6 +55,22 @@ async def root():
 async def health_check():
     return {"status": "healthy"}
 
+@app.post("/reset-database")
+async def reset_database():
+    """Reset database tables (WARNING: This will delete all data)"""
+    try:
+        # Drop all tables
+        from app.models.database import Base, engine
+        Base.metadata.drop_all(bind=engine)
+        
+        # Recreate all tables
+        from app.models.database import create_tables
+        create_tables()
+        
+        return {"message": "Database reset successfully", "warning": "All data has been deleted"}
+    except Exception as e:
+        return {"error": str(e)}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8080)
